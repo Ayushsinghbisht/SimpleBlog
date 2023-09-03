@@ -1,25 +1,52 @@
-import logo from './logo.svg';
+import { useState,useEffect} from "react";
+import Header from "./Header";
+import { Body } from "./Body";
+import { Footer } from "./Footer";
+import { Create } from "./container/Create";
+import { Blog } from "./container/Blog";
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [blogs,setBlogs]=useState([]);
+
+    function deleteBlog(id){
+        setBlogs(prevBlogs => {
+            return prevBlogs.filter((blogItem, index) => {
+              return index !== id;
+            });
+          });
+    }
+    function addBlog(newBlog) {
+        setBlogs(prevBlogs => {
+          return [ newBlog,...prevBlogs];
+        });
+      }
+
+ return(<><div className="main">
+ <Header/>
+ {/* <Body/> */}
+ <Create onAdd={addBlog}></Create>
+
+ {blogs.map((blogItem, index) => {
+        return (
+          <Blog
+            key={index}
+            id={index}
+            title={blogItem.title}
+            content={blogItem.content}
+            onDelete={deleteBlog}
+          />
+        );
+      })}
+
+
+
+
+ <Footer/>
+ </div>
+ </>)
+
 }
 
 export default App;
